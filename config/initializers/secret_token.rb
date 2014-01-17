@@ -9,19 +9,22 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-require 'securerandom'
+# require 'securerandom'
+# 
+# def secure_token
+  # token_file = Rails.root.join('.secret')
+  # if File.exist?(token_file)
+    # # Use the existing token.
+    # File.read(token_file).chomp
+  # else
+    # # Generate a new token and store it in token_file.
+    # token = SecureRandom.hex(64)
+    # File.write(token_file, token)
+    # token
+  # end
+# end
+# 
+# FoodOracle::Application.config.secret_key_base = secure_token
 
-def secure_token
-  token_file = Rails.root.join('.secret')
-  if File.exist?(token_file)
-    # Use the existing token.
-    File.read(token_file).chomp
-  else
-    # Generate a new token and store it in token_file.
-    token = SecureRandom.hex(64)
-    File.write(token_file, token)
-    token
-  end
-end
 
-FoodOracle::Application.config.secret_key_base = secure_token
+FoodOracle::Application.config.secret_token = '812694d69a1799ddb32915eaf13f2a1c19702b928dd547e9f38a2429bee5f7b2d67dde5e7e555b4438a32f975c17b21651431da6dc4d0d61475f67496d02abf1'
