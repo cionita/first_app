@@ -1,0 +1,3 @@
+- create restaurants
+- create menus
+- allow restaurants to publish menus
