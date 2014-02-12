@@ -1,6 +1,9 @@
 class SessionsController < ApplicationController
   
-  def new
+  def new_user
+  end
+  
+  def new_restaurant
   end
 
   def create
@@ -10,13 +13,16 @@ class SessionsController < ApplicationController
       redirect_back_or user
     else
       flash.now[:error] = 'Invalid email/password combination'
-      render 'new'
+      render 'new_user'
     end
   end
 
-  def destroy
+  def destroy_user
     sign_out
     redirect_to root_path
+  end
+  
+  def destroy_restaurant
   end
   
 end

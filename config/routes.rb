@@ -1,19 +1,23 @@
 FoodOracle::Application.routes.draw do
   resources :users
+  resources :restaurants
   resources :sessions, only: [:new, :create, :destroy]
 
-  match '/signup',  to: 'users#new'
-  
   match '/help',    to: 'static_pages#help'
   match '/about',   to: 'static_pages#about'
   match '/contact', to: 'static_pages#contact'
   
-  match '/signin',  to: 'sessions#new',         via: 'get'
-  match '/signout', to: 'sessions#destroy',     via: 'delete'
+  match '/signup',  to: 'users#new'
+  match '/signin',  to: 'sessions#new_user',         via: 'get'
+  match '/signout', to: 'sessions#destroy_user',     via: 'delete'
+  
+  match 'restaurant/signup',  to: 'restaurants#new',                                as: :restaurant_signup
+  match 'restaurant/signin',  to: 'sessions#new_restaurant',         via: 'get',    as: :restaurant_signin
+  match 'restaurant/signout', to: 'sessions#destroy_restaurant',     via: 'delete', as: :restaurant_signout
   
   resources :orders
   resources :menu_items
-  resources :restaurants
+  
 
   root to: 'static_pages#home'
   

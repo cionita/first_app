@@ -10,3 +10,12 @@ FactoryGirl.define do
     end
   end
 end
+
+FactoryGirl.define do
+  factory :restaurant do
+    name     "Restaurant"
+    email    "info@restaurant.com"
+    password "foobar"
+    password_confirmation "foobar"
+  end
+end
