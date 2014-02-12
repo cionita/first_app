@@ -10,6 +10,8 @@
 
       <%= f.label :password %>
       <%= f.password_field :password %>
+      
+      <%= f.hidden_field :type, :value => "user" %>
 
       <%= f.submit "Sign in", class: "btn btn-large btn-primary" %>
     <% end %>

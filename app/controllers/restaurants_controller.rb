@@ -21,6 +21,7 @@ class RestaurantsController < ApplicationController
   def create
     @restaurant = Restaurant.new(params[:restaurant])
     if @restaurant.save
+      sign_in_restaurant @restaurant
       flash[:success] = "Welcome to the Sample App!"
       redirect_to @restaurant
     else

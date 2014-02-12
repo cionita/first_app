@@ -43,14 +43,14 @@ describe "Restaurant pages" do
         expect { click_button submit }.to change(Restaurant, :count).by(1)
       end
       
-      # describe "after saving the restaurant" do
-        # before { click_button submit }
-        # let(:restaurant) { Restaurant.find_by_email('info@restaurant.com') }
-# 
-        # it { should have_selector('title', text: restaurant.name) }
-        # it { should have_selector('div.alert.alert-success', text: 'Welcome') }
-        # it { should have_link('Sign out') }
-      # end
+      describe "after saving the restaurant" do
+        before { click_button submit }
+        let(:restaurant) { Restaurant.find_by_email('info@restaurant.com') }
+
+        it { should have_selector('title', text: restaurant.name) }
+        it { should have_selector('div.alert.alert-success', text: 'Welcome') }
+        it { should have_link('Sign out') }
+      end
     end
   end
 end
