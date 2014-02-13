@@ -1,14 +1,10 @@
 class RestaurantsController < ApplicationController
-  # GET /restaurants
-  # GET /restaurants.json
-  # def index
-    # @restaurants = Restaurant.all
-# 
-    # respond_to do |format|
-      # format.html # index.html.erb
-      # format.json { render json: @restaurants }
-    # end
-  # end
+  before_filter :signed_in_restaurant, only: [:index, :edit, :update]
+  before_filter :correct_restaurant,   only: [:edit, :update]
+  
+  def index
+    @restaurants = Restaurant.paginate(page: params[:page])
+  end
 
   def show
     @restaurant = Restaurant.find(params[:id])
@@ -29,26 +25,20 @@ class RestaurantsController < ApplicationController
     end
   end
 
-  # GET /restaurants/1/edit
-  # def edit
-    # @restaurant = Restaurant.find(params[:id])
-  # end
+  def edit
+    @restaurant = Restaurant.find(params[:id])
+  end
 
-  # PUT /restaurants/1
-  # PUT /restaurants/1.json
-  # def update
-    # @restaurant = Restaurant.find(params[:id])
-# 
-    # respond_to do |format|
-      # if @restaurant.update_attributes(params[:restaurant])
-        # format.html { redirect_to @restaurant, notice: 'Restaurant was successfully updated.' }
-        # format.json { head :no_content }
-      # else
-        # format.html { render action: "edit" }
-        # format.json { render json: @restaurant.errors, status: :unprocessable_entity }
-      # end
-    # end
-  # end
+  def update
+    @restaurant = Restaurant.find(params[:id])
+    if @restaurant.update_attributes(params[:restaurant])
+      flash[:success] = "Profile updated"
+      sign_in_restaurant @restaurant
+      redirect_to @restaurant
+    else
+      render 'edit'
+    end
+  end
 
   # DELETE /restaurants/1
   # DELETE /restaurants/1.json
@@ -61,4 +51,18 @@ class RestaurantsController < ApplicationController
       # format.json { head :no_content }
     # end
   # end
+  
+  private
+
+    def signed_in_restaurant
+      unless restaurant_signed_in?
+        store_location
+        redirect_to restaurant_signin_url, notice: "Please sign in."
+      end
+    end
+    
+    def correct_restaurant
+      @restaurant = Restaurant.find(params[:id])
+      redirect_to(root_url) unless current_restaurant?(@restaurant)
+    end
 end

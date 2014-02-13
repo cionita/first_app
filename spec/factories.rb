@@ -13,8 +13,8 @@ end
 
 FactoryGirl.define do
   factory :restaurant do
-    name     "Restaurant"
-    email    "info@restaurant.com"
+    sequence(:name)  { |n| "Restaurant #{n}" }
+    sequence(:email) { |n| "restaurant_#{n}@foodoracle.com"}
     password "foobar"
     password_confirmation "foobar"
   end

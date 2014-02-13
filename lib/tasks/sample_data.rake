@@ -16,5 +16,15 @@ namespace :db do
                    password: password,
                    password_confirmation: password)
     end
+    
+    99.times do |n|
+      name  = Faker::Name.name
+      email = "restaurant-#{n+1}@railstutorial.org"
+      password  = "password"
+      Restaurant.create!(name: name,
+                   email: email,
+                   password: password,
+                   password_confirmation: password)
+    end
   end
 end

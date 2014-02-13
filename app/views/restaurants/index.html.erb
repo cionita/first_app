@@ -1,23 +1,10 @@
-<h1>Listing restaurants</h1>
+<% provide(:title, 'All restaurants') %>
+<h1>All restaurants</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<%= will_paginate %>
 
-<% @restaurants.each do |restaurant| %>
-  <tr>
-    <td><%= restaurant.name %></td>
-    <td><%= link_to 'Show', restaurant %></td>
-    <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
-    <td><%= link_to 'Destroy', restaurant, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
+<ul class="users">
+  <%= render @restaurants %>
+</ul>
 
-<br />
-
-<%= link_to 'New Restaurant', new_restaurant_path %>
+<%= will_paginate %>

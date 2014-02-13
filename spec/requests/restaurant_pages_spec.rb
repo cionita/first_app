@@ -53,4 +53,67 @@ describe "Restaurant pages" do
       end
     end
   end
+  
+  describe "edit" do
+    let(:restaurant) { FactoryGirl.create(:restaurant) }
+    before do
+      sign_in_restaurant restaurant
+      visit edit_restaurant_path(restaurant)
+    end
+
+    describe "page" do
+      it { should have_selector('h1',    text: "Update restaurant profile") }
+      it { should have_selector('title', text: "Edit restaurant") }
+    end
+
+    describe "with invalid information" do
+      before { click_button "Save changes" }
+
+      it { should have_content('error') }
+    end
+    
+    describe "with valid information" do
+      let(:new_name)  { "New restaurant" }
+      let(:new_email) { "info@newrestaurant.com" }
+      before do
+        fill_in "Name",             with: new_name
+        fill_in "Email",            with: new_email
+        fill_in "Password",         with: restaurant.password
+        fill_in "Confirm Password", with: restaurant.password
+        click_button "Save changes"
+      end
+
+      it { should have_selector('title', text: new_name) }
+      it { should have_selector('div.alert.alert-success') }
+      it { should have_link('Sign out', href: restaurant_signout_path) }
+      specify { restaurant.reload.name.should  == new_name }
+      specify { restaurant.reload.email.should == new_email }
+    end
+  end
+  
+  describe "index" do
+    before do
+      sign_in_restaurant FactoryGirl.create(:restaurant)
+      FactoryGirl.create(:restaurant, name: "Restaurant 1", email: "info@restaurant1.com")
+      FactoryGirl.create(:restaurant, name: "Restaurant 2", email: "info@restaurant2.com")
+      visit restaurants_path
+    end
+
+    it { should have_selector('title', text: 'All restaurants') }
+    it { should have_selector('h1',    text: 'All restaurants') }
+    
+    describe "pagination" do
+
+      before(:all) { 30.times { FactoryGirl.create(:restaurant) } }
+      after(:all)  { Restaurant.delete_all }
+
+      it { should have_selector('div.pagination') }
+
+      it "should list each restaurant" do
+        Restaurant.paginate(page: 1).each do |restaurant|
+          page.should have_selector('li', text: restaurant.name)
+        end
+      end
+    end
+  end
 end

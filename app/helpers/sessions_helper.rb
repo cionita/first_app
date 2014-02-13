@@ -40,6 +40,10 @@ module SessionsHelper
     @current_restaurant ||= Restaurant.find_by_remember_token(cookies[:remember_token])
   end
   
+  def current_restaurant?(restaurant)
+    restaurant == current_restaurant
+  end
+  
   def restaurant_signed_in?
     !current_restaurant.nil?
   end
