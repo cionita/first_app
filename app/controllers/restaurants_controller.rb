@@ -1,6 +1,7 @@
 class RestaurantsController < ApplicationController
-  before_filter :signed_in_restaurant, only: [:index, :edit, :update]
+  before_filter :signed_in_restaurant,   only: [:edit, :update]
   before_filter :correct_restaurant,   only: [:edit, :update]
+  before_filter :admin_user,     only: :destroy
   
   def index
     @restaurants = Restaurant.paginate(page: params[:page])
@@ -40,17 +41,11 @@ class RestaurantsController < ApplicationController
     end
   end
 
-  # DELETE /restaurants/1
-  # DELETE /restaurants/1.json
-  # def destroy
-    # @restaurant = Restaurant.find(params[:id])
-    # @restaurant.destroy
-# 
-    # respond_to do |format|
-      # format.html { redirect_to restaurants_url }
-      # format.json { head :no_content }
-    # end
-  # end
+  def destroy
+    Restaurant.find(params[:id]).destroy
+    flash[:success] = "Restaurant destroyed."
+    redirect_to restaurants_url
+  end
   
   private
 
@@ -64,5 +59,9 @@ class RestaurantsController < ApplicationController
     def correct_restaurant
       @restaurant = Restaurant.find(params[:id])
       redirect_to(root_url) unless current_restaurant?(@restaurant)
+    end
+    
+    def admin_user
+      redirect_to(root_url) unless current_user && current_user.admin?
     end
 end

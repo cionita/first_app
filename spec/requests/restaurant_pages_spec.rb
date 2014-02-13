@@ -92,19 +92,19 @@ describe "Restaurant pages" do
   end
   
   describe "index" do
+    
+    let(:restaurant) { FactoryGirl.create(:restaurant) }
+
     before do
-      sign_in_restaurant FactoryGirl.create(:restaurant)
-      FactoryGirl.create(:restaurant, name: "Restaurant 1", email: "info@restaurant1.com")
-      FactoryGirl.create(:restaurant, name: "Restaurant 2", email: "info@restaurant2.com")
       visit restaurants_path
     end
-
+    
     it { should have_selector('title', text: 'All restaurants') }
     it { should have_selector('h1',    text: 'All restaurants') }
     
     describe "pagination" do
 
-      before(:all) { 30.times { FactoryGirl.create(:restaurant) } }
+      before(:all) { 60.times { FactoryGirl.create(:restaurant) } }
       after(:all)  { Restaurant.delete_all }
 
       it { should have_selector('div.pagination') }
@@ -115,5 +115,29 @@ describe "Restaurant pages" do
         end
       end
     end
+    
+    describe "delete links" do
+      
+      it { should_not have_link('delete') }
+
+      describe "as an admin user" do
+        let(:admin) { FactoryGirl.create(:admin) }
+        
+        before(:all) { 5.times { FactoryGirl.create(:restaurant) } }
+        after(:all)  { Restaurant.delete_all }
+
+        before do
+          sign_in_user admin
+          visit restaurants_path
+        end
+
+        it { should have_link('delete', href: restaurant_path(Restaurant.first)) }
+        
+        it "should be able to delete a restaurant" do
+          expect { click_link('delete') }.to change(Restaurant, :count).by(-1)
+        end
+      end
+    end
+    
   end
 end

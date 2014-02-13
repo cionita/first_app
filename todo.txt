@@ -1,3 +1,1 @@
-- create restaurants
-- create menus
-- allow restaurants to publish menus
+- sa adaug o pagina de inceput mai atractiva

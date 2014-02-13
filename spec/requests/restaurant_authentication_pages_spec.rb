@@ -64,10 +64,11 @@ describe "Restaurant authentication" do
           specify { response.should redirect_to(restaurant_signin_path) }
         end
         
-        describe "visiting the user index" do
-          before { visit restaurants_path }
-          it { should have_selector('title', text: 'Sign in') }
-        end
+        # NOTE: one does not necessarily have to sign in in order to see the restaurants
+        # describe "visiting the restaurant index" do
+          # before { visit restaurants_path }
+          # it { should have_selector('title', text: 'Sign in') }
+        # end
       end
     
       describe "when attempting to visit a protected page" do
@@ -98,6 +99,18 @@ describe "Restaurant authentication" do
 
       describe "submitting a PUT request to the Restaurant#update action" do
         before { put restaurant_path(wrong_restaurant) }
+        specify { response.should redirect_to(root_url) }
+      end
+    end
+    
+    describe "as non-admin user" do
+      let(:restaurant) { FactoryGirl.create(:restaurant) }
+      let(:non_admin) { FactoryGirl.create(:user) }
+
+      before { sign_in_user non_admin }
+
+      describe "submitting a DELETE request to the Restaurants#destroy action" do
+        before { delete restaurant_path(restaurant) }
         specify { response.should redirect_to(root_url) }
       end
     end
